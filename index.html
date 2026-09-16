@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Boîte à Outils du Stagiaire — Guide de survie dans l'Éducation nationale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F5F0;
+    --paper-dark:#E8E9EA;
+    --card:#FFFFFF;
+    --ink:#1C2340;
+    --ink-soft:#54607A;
+    --stamp:#C8102E;
+    --teal:#16458B;
+    --rule:#C7CDDA;
+    --mark:#D6E4F5;
+    --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+    --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 3px),
+      var(--paper);
+    color:var(--ink);
+    font-family:var(--serif);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--teal);}
+  ::selection{background:var(--mark); color:var(--ink);}
+  :focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important;} }
+
+  .wrap{max-width:880px; margin:0 auto; padding:28px 20px 80px;}
+
+  /* Masthead */
+  .masthead{
+    border-bottom:2px solid var(--ink);
+    padding-bottom:18px;
+    margin-bottom:22px;
+  }
+  .masthead .kicker{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:0.02em;
+    color:var(--teal);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:6px;
+  }
+  .masthead .kicker .dot{
+    width:7px;height:7px;border-radius:50%;background:var(--teal);display:inline-block;
+  }
+  h1{
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:clamp(28px, 6vw, 42px);
+    margin:0 0 8px;
+    letter-spacing:-0.01em;
+  }
+  .masthead p{
+    font-family:var(--serif);
+    font-style:italic;
+    color:var(--ink-soft);
+    font-size:16px;
+    max-width:60ch;
+    margin:0 0 10px;
+  }
+  .stats{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+
+  /* Tabs styled like folder tabs */
+  .tabbar{
+    display:flex;
+    gap:6px;
+    margin-top:20px;
+    overflow-x:auto;
+  }
+  .tab{
+    font-family:var(--mono);
+    font-size:13.5px;
+    font-weight:500;
+    background:var(--paper-dark);
+    color:var(--ink-soft);
+    border:1px solid var(--rule);
+    border-bottom:none;
+    padding:10px 14px 9px;
+    border-radius:8px 8px 0 0;
+    cursor:pointer;
+    white-space:nowrap;
+    position:relative;
+    top:2px;
+  }
+  .tab.active{
+    background:var(--card);
+    color:var(--ink);
+    border-color:var(--ink);
+    top:0;
+    box-shadow:0 -2px 0 var(--teal) inset;
+  }
+  .panel-shell{
+    border:1px solid var(--ink);
+    background:var(--card);
+    border-radius:0 8px 8px 8px;
+    padding:20px;
+  }
+
+  /* Search */
+  .search-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border-bottom:1.5px dashed var(--rule);
+    padding-bottom:14px;
+    margin-bottom:16px;
+  }
+  .search-row .caret{
+    font-family:var(--mono);
+    color:var(--stamp);
+  }
+  .search-row input{
+    flex:1;
+    border:none;
+    background:transparent;
+    font-family:var(--mono);
+    font-size:15px;
+    color:var(--ink);
+    padding:6px 0;
+  }
+  .search-row input:focus{outline:none;}
+  .search-row input::placeholder{color:#9c9484;}
+
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+
+  .empty{
+    font-family:var(--serif);
+    font-style:italic;
+    color:var(--ink-soft);
+    padding:18px 4px;
+  }
+
+  /* Abbreviations */
+  .cat-label{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--teal);
+    margin:22px 0 8px;
+    padding-bottom:4px;
+    border-bottom:1px solid var(--rule);
+  }
+  .cat-label:first-child{margin-top:0;}
+  .abbr-row{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    padding:7px 0;
+    flex-wrap:wrap;
+  }
+  .abbr-code{
+    font-family:var(--mono);
+    font-weight:700;
+    color:var(--stamp);
+    font-size:14.5px;
+    white-space:nowrap;
+  }
+  .abbr-leader{
+    flex:1;
+    min-width:16px;
+    border-bottom:1.5px dotted var(--rule);
+    height:1px;
+    align-self:center;
+  }
+  .abbr-full{
+    font-weight:600;
+    font-size:14.5px;
+    flex-basis:100%;
+    order:5;
+    color:var(--ink);
+    margin-top:2px;
+  }
+  .abbr-def{
+    flex-basis:100%;
+    order:6;
+    color:var(--ink-soft);
+    font-size:14.5px;
+    margin-top:2px;
+  }
+
+  /* Acteurs cards */
+  .acteur-card{
+    border:1px solid var(--rule);
+    border-radius:2px;
+    background:var(--paper);
+    margin-bottom:14px;
+    position:relative;
+    padding:16px 16px 14px;
+  }
+  .acteur-card:before{
+    content:attr(data-abbr);
+    position:absolute;
+    top:-11px;
+    left:14px;
+    background:var(--teal);
+    color:var(--card);
+    font-family:var(--mono);
+    font-size:11.5px;
+    font-weight:600;
+    padding:2px 8px;
+    border-radius:3px;
+  }
+  .acteur-name{
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:16px;
+    margin:6px 0 10px;
+  }
+  .acteur-field{
+    display:flex;
+    gap:10px;
+    padding:5px 0;
+    border-top:1px dotted var(--rule);
+    font-size:14.5px;
+  }
+  .acteur-field:first-of-type{border-top:none;}
+  .acteur-field .flabel{
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--ink-soft);
+    min-width:150px;
+    flex-shrink:0;
+    padding-top:1px;
+  }
+
+  /* Sites */
+  .site-section-title{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--teal);
+    margin:22px 0 8px;
+    padding-bottom:4px;
+    border-bottom:1px solid var(--rule);
+  }
+  .site-section-title:first-child{margin-top:0;}
+  .site-row{
+    padding:8px 0;
+    border-bottom:1px dotted var(--rule);
+  }
+  .site-row:last-child{border-bottom:none;}
+  .site-row a{
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:14.5px;
+    text-decoration-thickness:1px;
+  }
+  .site-desc{
+    color:var(--ink-soft);
+    font-size:14.5px;
+    margin-top:2px;
+  }
+
+  /* Problemes accordion */
+  .fiche{
+    border:1px solid var(--rule);
+    border-radius:2px;
+    margin-bottom:10px;
+    background:var(--paper);
+    overflow:hidden;
+  }
+  .fiche-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:13px 14px;
+    cursor:pointer;
+  }
+  .fiche-mark{
+    flex-shrink:0;
+    width:20px;height:20px;
+    border-radius:50%;
+    background:var(--stamp);
+    color:var(--card);
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:13px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .fiche-title{
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:14.5px;
+    flex:1;
+  }
+  .fiche-chevron{
+    font-family:var(--mono);
+    color:var(--ink-soft);
+    transition:transform .15s ease;
+    flex-shrink:0;
+  }
+  .fiche.open .fiche-chevron{transform:rotate(90deg);}
+  .fiche-body{
+    display:none;
+    padding:0 16px 16px 44px;
+  }
+  .fiche.open .fiche-body{display:block;}
+  .fiche-symptomes{
+    font-style:italic;
+    color:var(--ink-soft);
+    font-size:14.5px;
+    margin:0 0 10px;
+  }
+  .fiche-solutions{
+    margin:0;
+    padding-left:18px;
+    font-size:14.5px;
+  }
+  .fiche-solutions li{margin-bottom:6px;}
+
+  footer{
+    max-width:880px;
+    margin:26px auto 0;
+    padding:0 20px;
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--ink-soft);
+    text-align:center;
+  }
+
+  @media (max-width:480px){
+    .acteur-field{flex-direction:column; gap:2px;}
+    .acteur-field .flabel{min-width:0;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <div class="kicker"><span class="dot"></span>BROT2YOU — DOSSIER DE RÉFÉRENCE</div>
+    <h1>La Boîte à Outils du Stagiaire</h1>
+    <p>Sigles, interlocuteurs, ressources et solutions pour s'y retrouver dans l'Éducation nationale — pensé pour un professeur d'anglais stagiaire, utile à toute l'équipe.</p>
+    <div class="stats" id="stats"></div>
+  </div>
+
+  <div class="tabbar" role="tablist">
+    <button class="tab active" data-tab="abbr">Abréviations</button>
+    <button class="tab" data-tab="acteurs">Acteurs de l'établissement</button>
+    <button class="tab" data-tab="sites">Sites utiles</button>
+    <button class="tab" data-tab="problemes">Problèmes &amp; solutions</button>
+  </div>
+
+  <div class="panel-shell">
+    <div class="search-row">
+      <span class="caret">&gt;</span>
+      <input type="text" id="search" placeholder="Chercher un sigle, un rôle, un site, une situation…" autocomplete="off">
+    </div>
+
+    <div class="tab-panel active" id="panel-abbr"></div>
+    <div class="tab-panel" id="panel-acteurs"></div>
+    <div class="tab-panel" id="panel-sites"></div>
+    <div class="tab-panel" id="panel-problemes"></div>
+  </div>
+
+  <footer>Dossier auto-hébergé — aucune donnée saisie n'est envoyée nulle part. Les usages et sigles varient d'un établissement et d'une académie à l'autre : en cas de doute, vérifier auprès de la direction ou du rectorat.</footer>
+</div>
+
+<script>
+(function(){
+
+// ---------- DATA ----------
+
+var ABBR = [
+{cat:"Diplômes, examens et certifications", items:[
+  {a:"DNB", f:"Diplôme National du Brevet", d:"Examen de fin de troisième : contrôle continu inscrit au LSU et épreuves finales (français, maths, histoire-géo-EMC, sciences, oral)."},
+  {a:"CFG", f:"Certificat de Formation Générale", d:"Diplôme de substitution au DNB pour les élèves de SEGPA ou d'ULIS."},
+  {a:"BAC", f:"Baccalauréat", d:"Diplôme de fin d'études secondaires, voie générale, technologique ou professionnelle."},
+  {a:"CAP", f:"Certificat d'Aptitude Professionnelle", d:"Diplôme professionnel préparé en 2 ans après la troisième."},
+  {a:"BTS", f:"Brevet de Technicien Supérieur", d:"Diplôme post-bac (bac+2) préparé en lycée."},
+  {a:"LV1 / LV2 / LV3", f:"Langue Vivante 1, 2, 3", d:"Rang de la langue dans le cursus de l'élève ; l'anglais est très majoritairement LV1."},
+  {a:"CECRL", f:"Cadre Européen Commun de Référence pour les Langues", d:"Référentiel de niveaux (A1 à C2) qui structure programmes et évaluation en langues."},
+  {a:"CO / CE", f:"Compréhension Orale / Compréhension Écrite", d:"Deux des cinq activités langagières du CECRL, évaluées séparément."},
+  {a:"EOC / EOI", f:"Expression Orale en Continu / en Interaction", d:"Les deux formes d'expression orale distinguées par le CECRL."},
+  {a:"EE", f:"Expression Écrite", d:"Cinquième activité langagière du CECRL."},
+  {a:"DELF / DALF", f:"Diplôme d'Études en Langue Française / Diplôme Approfondi de Langue Française", d:"Certifications officielles de français langue étrangère, utiles pour les élèves allophones (UPE2A)."},
+  {a:"LLCER", f:"Langues, Littératures et Cultures Étrangères et Régionales", d:"Spécialité de lycée général (dont l'anglais), à ne pas confondre avec le simple enseignement de LV."},
+  {a:"EAF", f:"Épreuves Anticipées de Français", d:"Épreuves du baccalauréat passées en fin de première."},
+  {a:"Pix", f:"certification des compétences numériques", d:"Plateforme et certification nationale passée en collège et lycée."},
+  {a:"ASSR 1 / 2", f:"Attestations Scolaires de Sécurité Routière", d:"Passées respectivement en classe de 5e et de 3e."},
+  {a:"CCF", f:"Contrôle en Cours de Formation", d:"Mode d'évaluation certificative réalisé pendant l'année, surtout en voie professionnelle."},
+  {a:"Parcoursup", f:"plateforme nationale d'admission dans l'enseignement supérieur", d:"Étape clé du suivi des élèves de terminale."}
+]},
+{cat:"Structures et instances", items:[
+  {a:"EPLE", f:"Établissement Public Local d'Enseignement", d:"Statut juridique des collèges et lycées publics."},
+  {a:"CA", f:"Conseil d'Administration", d:"Instance décisionnelle de l'établissement (budget, règlement intérieur, projets)."},
+  {a:"CP", f:"Conseil Pédagogique", d:"Instance consultative réunissant coordonnateurs de discipline et direction."},
+  {a:"CVC / CVL", f:"Conseil de la Vie Collégienne / Lycéenne", d:"Instance de représentation des élèves."},
+  {a:"CESCE", f:"Comité d'Éducation à la Santé, à la Citoyenneté et à l'Environnement", d:"Pilote la prévention (harcèlement, addictions, santé) dans l'établissement."},
+  {a:"F3SCT", f:"Formation Spécialisée en matière de Santé, Sécurité et Conditions de Travail", d:"Traite des conditions de travail des personnels (ex-CHSCT)."},
+  {a:"DSDEN", f:"Direction des Services Départementaux de l'Éducation Nationale", d:"Échelon départemental de l'institution, sous l'autorité du recteur."},
+  {a:"IA-DASEN", f:"Inspecteur d'Académie, Directeur Académique des Services de l'Éducation Nationale", d:"Représentant du recteur au niveau du département."},
+  {a:"Rectorat", f:"siège de l'académie", d:"Échelon académique, au-dessus du département."},
+  {a:"IA-IPR", f:"Inspecteur d'Académie-Inspecteur Pédagogique Régional", d:"Inspecteur référent d'une discipline pour l'académie ; évalue et accompagne les enseignants."},
+  {a:"INSPE", f:"Institut National Supérieur du Professorat et de l'Éducation", d:"Composante universitaire chargée de la formation des enseignants stagiaires (ex-ESPE, ex-IUFM)."},
+  {a:"MEEF", f:"Master Métiers de l'Enseignement, de l'Éducation et de la Formation", d:"Diplôme préparé à l'INSPE en parallèle du concours et du stage."},
+  {a:"CNED", f:"Centre National d'Enseignement à Distance", d:"Établissement public d'enseignement à distance."},
+  {a:"GRETA", f:"Groupement d'Établissements", d:"Structure mutualisée de formation continue des adultes."},
+  {a:"CIO", f:"Centre d'Information et d'Orientation", d:"Accueille élèves et familles pour les questions d'orientation."},
+  {a:"DDFPT", f:"Directeur Délégué aux Formations Professionnelles et Technologiques", d:"Pilote les enseignements professionnels et les relations avec les entreprises."},
+  {a:"REP / REP+", f:"Réseau d'Éducation Prioritaire (renforcé)", d:"Classement d'un établissement bénéficiant de moyens supplémentaires du fait de son contexte social."},
+  {a:"PIAL", f:"Pôle Inclusif d'Accompagnement Localisé", d:"Organise et répartit les moyens humains d'accompagnement du handicap (AESH) sur un secteur."},
+  {a:"MLDS", f:"Mission de Lutte contre le Décrochage Scolaire", d:"Dispositif académique de prévention et de remédiation du décrochage."},
+  {a:"FSE", f:"Foyer Socio-Éducatif", d:"Association qui finance des activités et clubs pour les élèves."},
+  {a:"UNSS", f:"Union Nationale du Sport Scolaire", d:"Fédération qui organise le sport scolaire hors temps de classe."}
+]},
+{cat:"Personnels et carrière", items:[
+  {a:"CPE", f:"Conseiller Principal d'Éducation", d:"Voir l'onglet Acteurs de l'établissement."},
+  {a:"AED", f:"Assistant d'Éducation", d:"Personnel de vie scolaire, en charge de la surveillance et de l'accompagnement éducatif."},
+  {a:"AESH", f:"Accompagnant d'Élèves en Situation de Handicap", d:"Accompagne un ou plusieurs élèves reconnus par la MDPH ; a remplacé l'appellation AVS."},
+  {a:"AVS", f:"Auxiliaire de Vie Scolaire", d:"Ancienne appellation de l'AESH, encore utilisée à l'oral."},
+  {a:"ATTEE", f:"Adjoint Technique Territorial des Établissements d'Enseignement", d:"Personnel technique (entretien, restauration) relevant de la collectivité territoriale."},
+  {a:"PsyEN", f:"Psychologue de l'Éducation Nationale", d:"A remplacé le COP ; intervient sur l'orientation (EDO) ou le développement (EDA en primaire)."},
+  {a:"COP", f:"Conseiller d'Orientation-Psychologue", d:"Ancienne appellation du PsyEN."},
+  {a:"PP", f:"Professeur Principal", d:"Voir l'onglet Acteurs de l'établissement."},
+  {a:"PLC", f:"Professeur de Lycée et Collège", d:"Corps enseignant du second degré général."},
+  {a:"PLP", f:"Professeur de Lycée Professionnel", d:"Corps enseignant de la voie professionnelle."},
+  {a:"TZR", f:"Titulaire sur Zone de Remplacement", d:"Enseignant titulaire affecté à une zone plutôt qu'à un poste fixe, pour assurer les remplacements."},
+  {a:"HSA / HSE", f:"Heure Supplémentaire Année / Effective", d:"Heures d'enseignement rémunérées en plus du service, à l'année ou ponctuelles."},
+  {a:"ORS", f:"Obligations Réglementaires de Service", d:"Cadre horaire réglementaire du temps de travail enseignant."},
+  {a:"DHG", f:"Dotation Horaire Globale", d:"Volume d'heures attribué à l'établissement pour construire la structure pédagogique de l'année."},
+  {a:"PPCR", f:"Parcours Professionnel, Carrières et Rémunérations", d:"Grille qui définit grades, échelons et rendez-vous de carrière des enseignants."}
+]},
+{cat:"Numérique et vie scolaire", items:[
+  {a:"ENT", f:"Espace Numérique de Travail", d:"Portail numérique de l'établissement (cahier de textes, notes, messagerie, absences)."},
+  {a:"EDT", f:"Emploi Du Temps", d:""},
+  {a:"LSU", f:"Livret Scolaire Unique", d:"Livret numérique qui consigne résultats et compétences de l'élève du CP à la 3e."},
+  {a:"LSL", f:"Livret Scolaire du Lycée", d:"Équivalent du LSU pour le lycée, transmis notamment à Parcoursup."},
+  {a:"GAR", f:"Gestionnaire d'Accès aux Ressources", d:"Donne accès aux ressources numériques éditoriales via l'ENT."},
+  {a:"CDI", f:"Centre de Documentation et d'Information", d:"Voir l'onglet Acteurs (professeur documentaliste)."},
+  {a:"BOEN / BO", f:"Bulletin Officiel de l'Éducation Nationale", d:"Publication officielle des textes réglementaires et des programmes."},
+  {a:"RGPD", f:"Règlement Général sur la Protection des Données", d:"Cadre européen encadrant l'usage des données personnelles des élèves (photos, outils numériques)."},
+  {a:"ARENA", f:"portail d'authentification des applications académiques", d:"Point d'entrée unique vers les outils métier (notes, absences, i-Prof...)."},
+  {a:"I-Prof", f:"portail carrière et RH des enseignants", d:"Accès au dossier administratif, à la messagerie professionnelle et aux affectations."},
+  {a:"E-Sidoc", f:"portail documentaire du CDI", d:"Catalogue en ligne du fonds documentaire, piloté par le professeur documentaliste."},
+  {a:"DRANE", f:"Délégation Régionale Académique au Numérique Éducatif", d:"Pilote la stratégie numérique de l'académie et coordonne les référents numériques d'établissement."},
+  {a:"IAN", f:"Interlocuteur Académique pour le Numérique", d:"Expert référent d'une discipline pour les usages du numérique à l'échelle académique, en lien avec la DRANE."}
+]},
+{cat:"Handicap et inclusion", items:[
+  {a:"PAP", f:"Plan d'Accompagnement Personnalisé", d:"Aménagements pédagogiques pour élèves à besoins particuliers (souvent troubles DYS), sans passer par la MDPH."},
+  {a:"PPS", f:"Projet Personnalisé de Scolarisation", d:"Plan d'aménagement pour un élève en situation de handicap reconnu par la MDPH, avec ou sans AESH."},
+  {a:"PAI", f:"Projet d'Accueil Individualisé", d:"Protocole pour un élève présentant un trouble de santé (allergie, maladie chronique)."},
+  {a:"GEVASCO", f:"Guide d'Évaluation des besoins de compensation en matière de SCOlarisation", d:"Document support à l'évaluation des besoins par la MDPH."},
+  {a:"MDPH", f:"Maison Départementale des Personnes Handicapées", d:"Reconnaît le handicap et notifie les aménagements et l'aide humaine."},
+  {a:"ULIS", f:"Unité Localisée pour l'Inclusion Scolaire", d:"Dispositif qui scolarise des élèves handicapés en inclusion partielle dans les classes ordinaires."},
+  {a:"SEGPA", f:"Section d'Enseignement Général et Professionnel Adapté", d:"Structure de collège pour élèves en grande difficulté scolaire durable."},
+  {a:"UPE2A", f:"Unité Pédagogique pour Élèves Allophones Arrivants", d:"Accueil et scolarisation des élèves non francophones nouvellement arrivés."},
+  {a:"DYS", f:"troubles « dys »", d:"Famille de troubles des apprentissages (dyslexie, dyspraxie, dysphasie, dyscalculie...) donnant souvent lieu à un PAP."}
+]},
+{cat:"Programmes et dispositifs pédagogiques", items:[
+  {a:"AP", f:"Accompagnement Personnalisé", d:"Temps dédié à la différenciation, la méthodologie ou l'approfondissement, inscrit à l'emploi du temps."},
+  {a:"EPI", f:"Enseignement Pratique Interdisciplinaire", d:"Dispositif de croisement disciplinaire au collège, toujours pratiqué dans certains établissements."},
+  {a:"EMC", f:"Enseignement Moral et Civique", d:""},
+  {a:"EMI", f:"Éducation aux Médias et à l'Information", d:"Souvent copilotée avec le professeur documentaliste."},
+  {a:"PEAC", f:"Parcours d'Éducation Artistique et Culturelle", d:"Organise la vie artistique et culturelle de l'élève sur toute sa scolarité."},
+  {a:"PPRE", f:"Programme Personnalisé de Réussite Éducative", d:"Plan d'action ciblé pour un élève en difficulté importante dans l'acquisition du socle."},
+  {a:"PIIODMEP", f:"Parcours Individuel d'Information, d'Orientation et de Découverte du Monde Économique et Professionnel", d:"Accompagne l'orientation de l'élève de la 6e à la terminale."}
+]},
+{cat:"Sécurité et vie de l'établissement", items:[
+  {a:"PPMS", f:"Plan Particulier de Mise en Sûreté", d:"Protocole de sécurité face aux risques majeurs (intrusion, attentat, risque naturel)."}
+]},
+{cat:"Réforme de la formation des enseignants (M2E, 2026)", items:[
+  {a:"M2E", f:"Master Métiers de l'Enseignement et de l'Éducation", d:"Nouveau master de formation initiale, structuré en 4 blocs de compétences liés aux stages en établissement."},
+  {a:"SOPA", f:"Stage d'Observation et de Pratique Accompagnée", d:"Stage en établissement pendant le M2E, sans responsabilité pleine de classe : deux semaines groupées puis un stage filé (2 jours par semaine)."},
+  {a:"Élève fonctionnaire", f:"statut du lauréat d'un concours bac+3 en 1re année de M2E", d:"Rémunéré environ 1400 € net par mois, soumis aux droits et obligations de tout agent public, avec un devoir d'assiduité renforcé."},
+  {a:"Étudiant non lauréat", f:"statut d'un étudiant non reçu au concours mais admis en 1re année de M2E", d:"Conserve la qualité d'étudiant, non rémunéré et sans droit à gratification."},
+  {a:"Fonctionnaire stagiaire (mi-temps)", f:"statut en 2e année de M2E pour les lauréats du concours", d:"Mi-temps devant élèves, mi-temps en formation, avant titularisation à bac+5."},
+  {a:"PFA", f:"Professeur Formateur Académique", d:"Enseignant qui assure une partie de la formation, en établissement ou à l'INSPÉ."},
+  {a:"EAFC", f:"École Académique de Formation Continue", d:"Organise les dispositifs de formation continue, dont les formations de tuteurs."},
+  {a:"DPE", f:"Division des Personnels Enseignants", d:"Service du rectorat qui instruit les demandes d'autorisation d'absence des élèves fonctionnaires."},
+  {a:"ASAP", f:"plateforme de demande d'autorisation d'absence", d:"Outil par lequel l'élève fonctionnaire dépose sa demande auprès de la DPE, au moins 8 jours ouvrés avant l'absence."},
+  {a:"CGFP", f:"Code Général de la Fonction Publique", d:"Texte qui fixe les droits et obligations communs à tout agent public, applicable aux élèves fonctionnaires et fonctionnaires stagiaires."}
+]}
+];
+
+var ACTEURS = [
+{abbr:"Direction", name:"Chef d'établissement (Principal / Proviseur)", role:"Pilote pédagogique et administratif de l'établissement, autorité hiérarchique de tous les personnels, préside le CA et le conseil de discipline.", quand:"Décision engageant l'établissement, incident grave, autorisation de sortie ou de projet, difficulté non résolue ailleurs.", demander:"Un dossier factuel déjà instruit (dates, faits, personnes déjà consultées) plutôt qu'une question ouverte."},
+{abbr:"Direction", name:"Adjoint(e) au chef d'établissement", role:"Souvent en charge de l'organisation pédagogique quotidienne, des emplois du temps et du suivi disciplinaire courant.", quand:"Absence imprévue, remplacement, organisation de séquence ou d'évaluation, incident de classe du quotidien.", demander:"Signaler tôt tout empêchement pour que l'organisation du service soit anticipée."},
+{abbr:"Intendance", name:"Gestionnaire / Intendant(e)", role:"Gère le budget, les commandes, la restauration et la maintenance des locaux et du matériel.", quand:"Besoin de matériel pédagogique, photocopies en nombre, réservation de matériel audiovisuel, frais de sortie scolaire.", demander:"Un bon de commande ou une demande écrite, avec un délai réaliste — les commandes suivent un circuit budgétaire."},
+{abbr:"Secrétariat", name:"Secrétariat de direction / d'intendance", role:"Interface administrative quotidienne : courrier, convocations, dossiers élèves, plannings.", quand:"Question de procédure administrative, besoin d'un document, transmission d'une information à la direction.", demander:"Être précis sur l'objet de la demande ; le secrétariat oriente vers la bonne personne si besoin."},
+{abbr:"CPE", name:"Conseiller Principal d'Éducation", role:"Pilote la vie scolaire, l'organisation de la surveillance, le suivi de l'assiduité et du comportement, souvent premier relais sur le climat scolaire.", quand:"Absentéisme, comportement perturbateur récurrent, conflit entre élèves, besoin de comprendre le contexte d'un élève.", demander:"Décrire les faits observés en classe plutôt qu'une impression générale ; le CPE croise avec les autres professeurs."},
+{abbr:"Vie sco.", name:"Vie scolaire (équipe des AED)", role:"Assure la surveillance, l'accueil, la gestion des retards et absences au quotidien, sous l'autorité du CPE.", quand:"Élève exclu de cours, gestion immédiate d'un incident, vérification d'une absence.", demander:"Un mot écrit et daté pour tout élève envoyé hors du cours, avec le motif."},
+{abbr:"AESH", name:"Accompagnant d'élève en situation de handicap", role:"Accompagne au quotidien un ou plusieurs élèves désignés par la MDPH, dans et parfois hors la classe.", quand:"Avant chaque séquence si un élève accompagné est dans la classe, pour ajuster supports et objectifs.", demander:"Le contenu du PPS/PAP de l'élève et les adaptations déjà en place, pour ne pas repartir de zéro."},
+{abbr:"CDI", name:"Professeur documentaliste", role:"Gère le centre de documentation, forme à la recherche d'information (EMI), partenaire fréquent de projets interdisciplinaires.", quand:"Projet de recherche documentaire, travail sur la presse ou des sources anglophones, besoin de ressources ou d'un créneau au CDI.", demander:"La disponibilité de la salle et un temps de co-préparation si le projet est ambitieux."},
+{abbr:"Infirmerie", name:"Infirmier(ère) scolaire", role:"Assure les soins de première urgence, le suivi de santé et la confidentialité médicale des élèves.", quand:"Malaise ou accident en cours, doute sur l'état de santé d'un élève, élève en détresse sans cause identifiée.", demander:"Envoyer l'élève avec un mot précisant l'heure et les circonstances, sans détailler un diagnostic qui ne vous revient pas."},
+{abbr:"Social", name:"Assistant(e) social(e) scolaire", role:"Accompagne élèves et familles en difficulté sociale ou familiale, dans la confidentialité.", quand:"Signes de mal-être, situation familiale préoccupante évoquée par l'élève, besoin d'aide matérielle pour une famille.", demander:"Transmettre un fait précis et daté ; ne pas chercher à résoudre seul une situation qui relève de son champ."},
+{abbr:"PsyEN", name:"PsyEN (ex-COP)", role:"Accompagne l'orientation et, selon le contexte, le développement psychologique de l'élève.", quand:"Question d'orientation, décrochage progressif de la motivation scolaire.", demander:"Solliciter un rendez-vous via le CPE ou le secrétariat, plutôt qu'un contact direct informel."},
+{abbr:"Médecin", name:"Médecin scolaire", role:"Réalise les visites médicales obligatoires et se prononce sur les aménagements de santé.", quand:"Rarement en direct pour un stagiaire ; passer par l'infirmerie ou la direction.", demander:"N'intervient pas au quotidien — l'infirmerie scolaire est le bon premier relais."},
+{abbr:"DDFPT", name:"DDFPT (lycée pro ou technique)", role:"Pilote les enseignements professionnels, les périodes de formation en entreprise (PFMP) et les relations avec les employeurs.", quand:"Question sur les stages en entreprise des élèves, articulation avec l'enseignement général.", demander:"Le calendrier des PFMP, pour ne pas programmer une évaluation pendant une période de stage."},
+{abbr:"PP", name:"Professeur principal", role:"Coordonne le suivi pédagogique et le climat de sa classe, fait le lien avec les familles et prépare les conseils de classe.", quand:"Difficulté généralisée dans une classe, besoin d'informations sur un élève, avant un conseil de classe.", demander:"Un point rapide en salle des professeurs vaut souvent mieux qu'un message tardif la veille du conseil."},
+{abbr:"Coordo", name:"Coordonnateur/trice de discipline (langues vivantes)", role:"Anime l'équipe disciplinaire, fait circuler les ressources, organise la progression commune et les commandes de manuels.", quand:"Question de progression, de barème commun, de matériel pédagogique de la discipline.", demander:"Les documents de progression déjà en usage dans l'établissement, avant d'en créer de nouveaux."},
+{abbr:"Numérique", name:"Référent numérique", role:"Accompagne les usages du numérique pédagogique et administratif (ENT, outils, matériel) dans l'établissement ; relais local de l'IAN et de la DRANE au niveau académique.", quand:"Problème d'accès à l'ENT, besoin de formation sur un outil, projet numérique en classe.", demander:"Préciser l'outil et le problème rencontré (message d'erreur, étape bloquante) pour un diagnostic rapide."},
+{abbr:"Harcèlement", name:"Référent harcèlement", role:"Personnel formé pour recueillir la parole des élèves et coordonner la réponse de l'établissement en cas de harcèlement.", quand:"Suspicion ou signalement de harcèlement, isolement répété d'un élève.", demander:"Un signalement écrit et daté des faits observés, même partiels."},
+{abbr:"Tuteur", name:"Tuteur/tutrice de terrain", role:"Enseignant expérimenté de la discipline, désigné pour accompagner le stagiaire par des visites croisées et des conseils réguliers.", quand:"Toute question de pratique de classe, de gestion de groupe, de préparation de séance.", demander:"Convenir d'un rythme régulier d'échange dès le début d'année, même sans créneau commun à l'emploi du temps."},
+{abbr:"INSPE", name:"Formateur/tutrice INSPE (universitaire)", role:"Encadre le mémoire et la formation universitaire du stagiaire, distinct du tuteur de terrain.", quand:"Question liée au mémoire, aux attendus universitaires, aux évaluations de l'INSPE.", demander:"Clarifier dès la rentrée qui valide quoi entre tuteur de terrain et tuteur INSPE."},
+{abbr:"IA-IPR", name:"IA-IPR d'anglais", role:"Inspecteur référent de la discipline pour l'académie ; évalue lors des visites et pilote les orientations pédagogiques académiques.", quand:"Rarement en direct pour un stagiaire ; le sujet est généralement porté par le tuteur.", demander:"Se préparer avant une visite avec le tuteur, plutôt que de solliciter directement l'inspecteur."},
+{abbr:"EAFC", name:"École Académique de Formation Continue", role:"Organise les dispositifs de formation et d'accompagnement des tuteurs (formation des néo-tuteurs, accompagnement des tuteurs déjà formés).", quand:"Pour se former au tutorat ou s'inscrire à un dispositif d'accompagnement en tant que tuteur.", demander:"Le contact et les modalités d'inscription sont publiés chaque année sur le portail académique, rubrique Formateurs / Tuteurs / PFA."}
+];
+
+var SITES = [
+{section:"Institutionnel national", items:[
+  {n:"education.gouv.fr", u:"https://www.education.gouv.fr", d:"Site du ministère — actualités, textes, chiffres clés."},
+  {n:"eduscol.education.fr", u:"https://eduscol.education.fr", d:"Portail pédagogique officiel, dont la page dédiée à l'anglais et aux langues vivantes."},
+  {n:"education.gouv.fr/bo", u:"https://www.education.gouv.fr/le-bulletin-officiel-de-l-education-nationale-3211", d:"Bulletin officiel — textes réglementaires et programmes en vigueur."},
+  {n:"legifrance.gouv.fr", u:"https://www.legifrance.gouv.fr", d:"Textes de loi et décrets, pour vérifier une base réglementaire précise."},
+  {n:"reseau-canope.fr", u:"https://www.reseau-canope.fr", d:"Réseau Canopé — ressources pédagogiques et formation continue."},
+  {n:"france-education-international.fr", u:"https://www.france-education-international.fr", d:"Certifications DELF/DALF et coopération internationale."},
+  {n:"cned.fr", u:"https://www.cned.fr", d:"Centre National d'Enseignement à Distance."},
+  {n:"pix.fr", u:"https://pix.fr", d:"Certification nationale des compétences numériques."},
+  {n:"apden.org", u:"https://www.apden.org", d:"Association des professeurs documentalistes, utile pour les projets EMI."}
+]},
+{section:"Académique et local", items:[
+  {n:"ac-montpellier.fr", u:"https://www.ac-montpellier.fr", d:"Portail de l'académie de Montpellier — pôle langues vivantes, actualités et contacts de l'IA-IPR."},
+  {n:"inspe-academiedemontpellier.fr", u:"https://www.inspe-academiedemontpellier.fr", d:"INSPE de l'académie de Montpellier — formation, maquettes MEEF, contacts, dont le site de Perpignan."},
+  {n:"DSDEN des Pyrénées-Orientales", u:"https://www.ac-montpellier.fr", d:"Accessible depuis le portail de l'académie de Montpellier, pour les démarches départementales (66)."}
+]},
+{section:"Ressources pédagogiques pour l'anglais", items:[
+  {n:"learnenglish.britishcouncil.org", u:"https://learnenglish.britishcouncil.org", d:"British Council LearnEnglish — ressources graduées par niveau CECRL, avec un espace dédié aux adolescents (LearnEnglish Teens)."},
+  {n:"bbc.co.uk/learningenglish", u:"https://www.bbc.co.uk/learningenglish", d:"Audio et vidéo authentiques de niveau intermédiaire."},
+  {n:"lumni.fr", u:"https://www.lumni.fr", d:"Vidéos et documents pédagogiques francophones, utiles pour amener les élèves vers l'anglais."},
+  {n:"voanews.com/learningenglish", u:"https://learningenglish.voanews.com", d:"Voice of America Learning English — actualités en anglais simplifié, avec audio."},
+  {n:"islcollective.com", u:"https://en.islcollective.com", d:"Fiches et supports partagés par des enseignants d'anglais du monde entier."},
+  {n:"onestopenglish.com", u:"https://www.onestopenglish.com", d:"Ressources Macmillan pour l'enseignement de l'anglais."},
+  {n:"cambridgeenglish.org", u:"https://www.cambridgeenglish.org", d:"Référentiels et ressources Cambridge English."},
+  {n:"youglish.com", u:"https://youglish.com", d:"Prononciation illustrée par des extraits vidéo authentiques."},
+  {n:"forvo.com", u:"https://forvo.com", d:"Dictionnaire de prononciation collaboratif."}
+]},
+{section:"Outils numériques pratiques", items:[
+  {n:"wordwall.net", u:"https://wordwall.net", d:"Création rapide d'activités interactives (quiz, memory, roue)."},
+  {n:"learningapps.org", u:"https://learningapps.org", d:"Exercices interactifs réutilisables en classe."},
+  {n:"genial.ly", u:"https://genial.ly", d:"Contenus interactifs et présentations immersives."},
+  {n:"quizlet.com", u:"https://quizlet.com", d:"Cartes mémoire et jeux de vocabulaire."},
+  {n:"padlet.com", u:"https://padlet.com", d:"Mur collaboratif pour mutualiser des productions d'élèves."},
+  {n:"kahoot.com", u:"https://kahoot.com", d:"Quiz ludiques en temps réel."}
+]}
+];
+
+var PROBLEMES = [
+{t:"Je perds l'autorité sur une classe", s:"Bavardages continus, consignes ignorées, sentiment de devoir crier pour se faire entendre.", sol:[
+  "Reprendre les rituels d'entrée en classe (silence avant de commencer, installation cadrée) dès le prochain cours, pas en fin d'année.",
+  "Réduire le nombre de règles à 3-4 non négociables, annoncées et appliquées avec constance.",
+  "Observer une classe de son tuteur pour repérer les micro-gestes professionnels (placement, regard, silence tenu).",
+  "En parler explicitement au tuteur et/ou au CPE : c'est une question de métier, pas un aveu d'échec."
+]},
+{t:"Je ne sais pas quoi faire de ma charge de travail", s:"Préparations qui débordent largement le temps disponible, sentiment de ne jamais être prêt.", sol:[
+  "Accepter une préparation « suffisante » plutôt que parfaite en première année ; réinvestir et affiner l'an prochain.",
+  "Réutiliser et adapter les progressions du coordonnateur de discipline plutôt que tout reconstruire.",
+  "Bloquer des créneaux fixes de préparation dans la semaine plutôt que de préparer « quand il reste du temps ».",
+  "Prioriser la préparation des séances et évaluations à venir sous 48h, différer le reste."
+]},
+{t:"Je ne sais pas comment noter ou évaluer", s:"Barèmes qui varient d'une copie à l'autre, doute sur la sévérité, notes très dispersées ou au contraire toutes identiques.", sol:[
+  "Construire une grille critériée avant l'évaluation, alignée sur les activités langagières du CECRL visées.",
+  "Corriger une dizaine de copies, ajuster le barème si besoin, puis reprendre la correction depuis le début de la pile.",
+  "Demander à voir un exemple de grille déjà utilisée par le coordonnateur de discipline.",
+  "Se rappeler que la note évalue une tâche précise, pas l'élève dans l'absolu."
+]},
+{t:"Ma relation avec mon tuteur est difficile ou distante", s:"Peu de retours, créneaux communs rares, impression de ne pas savoir où on en est.", sol:[
+  "Poser explicitement un rythme d'échange dès le début d'année (ex. un point bref chaque semaine), même par message.",
+  "Préparer des questions concrètes plutôt que des demandes ouvertes (« comment gérer les bavardages en 6e ? » plutôt que « ça ne va pas »).",
+  "Si le blocage persiste, en parler au chef d'établissement ou au référent formation de l'INSPE : ce n'est pas un sujet tabou."
+]},
+{t:"Je m'y perds dans l'administratif (ENT, cahier de textes, appel)", s:"Oublis d'appel, cahier de textes rempli en retard, notifications ENT ignorées.", sol:[
+  "Faire l'appel en tout début de cours, avant toute autre action, jusqu'à ce que ce soit un automatisme.",
+  "Remplir le cahier de textes le jour même, pas en différé — le détail du contenu s'efface vite.",
+  "Demander une démonstration pas à pas de l'ENT à la secrétaire ou au référent numérique plutôt que d'explorer seul sous pression."
+]},
+{t:"Je dois écrire mon mémoire et je ne sais pas par où commencer", s:"Sujet flou, sentiment que la pratique de classe et l'écriture universitaire sont deux mondes séparés.", sol:[
+  "Choisir un sujet né d'une vraie question de classe rencontrée cette année, pas un sujet abstrait plaqué ensuite.",
+  "Clarifier dès la rentrée les attendus précis et le calendrier avec le formateur INSPE référent du mémoire.",
+  "Tenir un carnet de bord court après chaque séance marquante : c'est la matière première du mémoire."
+]},
+{t:"Je vais être inspecté(e) et je ne sais pas à quoi m'attendre", s:"Anxiété diffuse, tentation de préparer une séance « vitrine ».", sol:[
+  "Préparer une séance représentative de sa pratique habituelle, pas une séance exceptionnelle jouée une seule fois.",
+  "Relire les attendus du référentiel de compétences professionnelles des enseignants.",
+  "Préparer avec le tuteur les points probables d'entretien (progression annuelle, différenciation, évaluation)."
+]},
+{t:"Je ne sais pas gérer un PPMS ou une alerte de sécurité", s:"Découverte du protocole le jour même, incertitude sur les gestes à faire.", sol:[
+  "Demander le PPMS de l'établissement et le lire avant la première alerte, pas pendant.",
+  "Repérer dès la rentrée les points de rassemblement et les consignes spécifiques à chaque salle utilisée.",
+  "En cas de doute pendant un exercice, suivre les consignes de la vie scolaire ou de la direction sans chercher à improviser."
+]},
+{t:"Un parent d'élève me met en difficulté (message agressif, désaccord de note)", s:"Message familial vif, remise en cause directe d'une décision pédagogique.", sol:[
+  "Ne jamais répondre à chaud ; relire le message le lendemain avant de rédiger une réponse factuelle et posée.",
+  "Informer ou mettre en copie le professeur principal et/ou la direction dès qu'un échange devient tendu.",
+  "S'appuyer sur des éléments factuels déjà consignés (grille d'évaluation, cahier de textes) plutôt que sur une justification orale."
+]},
+{t:"Ma classe est très hétérogène, je ne sais pas différencier", s:"Une partie de la classe s'ennuie, une autre décroche, la même consigne ne convient à personne.", sol:[
+  "Différencier d'abord par l'étayage (aide, amorces, banque de mots) avant de différencier par la tâche elle-même.",
+  "Prévoir systématiquement une piste « pour aller plus loin » à annoncer en fin de consigne.",
+  "Utiliser les PAP/PPS des élèves concernés comme point de départ concret plutôt que d'inventer des solutions au hasard."
+]},
+{t:"Je me sens isolé(e) et découragé(e)", s:"Sentiment de ne pas y arriver seul, comparaison anxieuse avec des collègues titulaires.", sol:[
+  "Se rappeler que la première année d'enseignement est réputée difficile pour tout le monde, tuteur compris à ses débuts.",
+  "Chercher activement les autres stagiaires de l'établissement ou du bassin pour partager les difficultés.",
+  "Solliciter le tuteur, le chef d'établissement ou le service social des personnels de l'académie sans attendre un point de rupture."
+]},
+{t:"Je ne trouve jamais assez de photocopies ou de matériel", s:"Quota de photocopies atteint en quelques semaines, matériel audio ou vidéo indisponible.", sol:[
+  "Demander en amont le quota et le circuit de commande auprès de la gestion.",
+  "Privilégier les supports numériques projetés et l'ENT quand c'est possible, pour économiser le papier.",
+  "Anticiper les commandes de matériel spécifique (enceinte, câble HDMI) plutôt que de découvrir un problème technique en cours."
+]},
+{t:"Je ne connais pas mes droits en tant que stagiaire", s:"Incertitude sur les démarches en cas d'absence, sur la rémunération ou la quotité de service.", sol:[
+  "Vérifier son statut exact et sa quotité de service auprès du secrétariat ou de l'INSPE dès la rentrée.",
+  "Signaler toute absence à la fois à l'établissement et à l'INSPE, selon les procédures propres à chaque académie.",
+  "En cas de doute sur un droit précis, s'adresser au service gestionnaire des personnels du rectorat plutôt qu'à des sources informelles."
+]},
+{t:"Un élève me pose un problème de comportement récurrent et rien ne change", s:"Rappels à l'ordre sans effet, sentiment de s'épuiser sur un seul élève au détriment du reste de la classe.", sol:[
+  "Documenter les faits (date, contexte, action prise) plutôt que de garder une impression générale.",
+  "En parler au professeur principal et au CPE : un comportement isolé en apparence est souvent connu ailleurs.",
+  "Proposer un cadre individuel clair à l'élève (attente précise, conséquence connue à l'avance) plutôt qu'une sanction improvisée."
+]},
+{t:"Je ne comprends pas mon statut (élève fonctionnaire, étudiant non lauréat, fonctionnaire stagiaire)", s:"Confusion sur la rémunération, les obligations et le rythme de formation selon le profil.", sol:[
+  "Vérifier sa situation exacte auprès du secrétariat de l'INSPE ou du rectorat dès la rentrée : le statut change la rémunération, les obligations et la durée du stage.",
+  "Retenir que seul l'élève fonctionnaire est rémunéré (environ 1400 € net par mois) et soumis à un devoir d'assiduité renforcé ; l'étudiant non lauréat reste étudiant, sans rémunération ni gratification.",
+  "Savoir que la 2e année de M2E se fait en qualité de fonctionnaire stagiaire à mi-temps, avant la titularisation à bac+5."
+]},
+{t:"Je dois m'absenter pendant ma formation ou mon stage", s:"Incertitude sur qui prévenir et sous quel délai, crainte d'une retenue de salaire.", sol:[
+  "Déposer la demande d'autorisation d'absence auprès de la division des personnels enseignants (DPE) du rectorat au moins 8 jours ouvrés avant, sauf urgence.",
+  "Informer en parallèle l'INSPE, sous couvert du chef d'établissement, ainsi que le tuteur de stage.",
+  "Savoir que toute absence est communiquée au rectorat et qu'une absence non autorisée entraîne une retenue de salaire."
+]},
+{t:"Je ne comprends pas le rythme de mon stage en établissement (SOPA)", s:"Confusion entre stage groupé et stage filé, doute sur les jours de présence attendus.", sol:[
+  "Retenir la structure type : deux semaines de stage groupé en continu, puis un stage filé les lundi et jeudi (mardi et mercredi pour l'EPS).",
+  "Vérifier avec son tuteur le volume hebdomadaire attendu (6 h en général, davantage pour l'EPS, la documentation ou le CPE).",
+  "Savoir qu'une convention associant l'établissement, l'établissement de formation, le stagiaire et le tuteur est signée avant chaque période de stage."
+]}
+];
+
+// ---------- HELPERS ----------
+
+function norm(s){
+  return (s||"").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+}
+function esc(s){
+  return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+function matches(query, fields){
+  if(!query) return true;
+  var q = norm(query);
+  for(var i=0;i<fields.length;i++){
+    if(norm(fields[i]).indexOf(q) !== -1) return true;
+  }
+  return false;
+}
+
+// ---------- RENDERERS ----------
+
+function renderAbbr(q){
+  var out = "";
+  var any = false;
+  ABBR.forEach(function(group){
+    var rows = "";
+    group.items.forEach(function(it){
+      if(matches(q, [it.a, it.f, it.d])){
+        any = true;
+        rows += '<div class="abbr-row">' +
+          '<span class="abbr-code">'+esc(it.a)+'</span>' +
+          '<span class="abbr-leader"></span>' +
+          '<span class="abbr-full">'+esc(it.f)+'</span>' +
+          (it.d ? '<span class="abbr-def">'+esc(it.d)+'</span>' : '') +
+          '</div>';
+      }
+    });
+    if(rows){
+      out += '<div class="cat-label">'+esc(group.cat)+'</div>' + rows;
+    }
+  });
+  document.getElementById("panel-abbr").innerHTML = any ? out : emptyState(q);
+}
+
+function renderActeurs(q){
+  var out = "";
+  var any = false;
+  ACTEURS.forEach(function(p){
+    if(matches(q, [p.name, p.role, p.quand, p.demander, p.abbr])){
+      any = true;
+      out += '<div class="acteur-card" data-abbr="'+esc(p.abbr)+'">' +
+        '<div class="acteur-name">'+esc(p.name)+'</div>' +
+        '<div class="acteur-field"><span class="flabel">Rôle</span><span>'+esc(p.role)+'</span></div>' +
+        '<div class="acteur-field"><span class="flabel">Quand le/la solliciter</span><span>'+esc(p.quand)+'</span></div>' +
+        '<div class="acteur-field"><span class="flabel">Quoi apporter / demander</span><span>'+esc(p.demander)+'</span></div>' +
+        '</div>';
+    }
+  });
+  document.getElementById("panel-acteurs").innerHTML = any ? out : emptyState(q);
+}
+
+function renderSites(q){
+  var out = "";
+  var any = false;
+  SITES.forEach(function(group){
+    var rows = "";
+    group.items.forEach(function(it){
+      if(matches(q, [it.n, it.d])){
+        any = true;
+        rows += '<div class="site-row">' +
+          '<a href="'+esc(it.u)+'" target="_blank" rel="noopener">'+esc(it.n)+'</a>' +
+          '<div class="site-desc">'+esc(it.d)+'</div>' +
+          '</div>';
+      }
+    });
+    if(rows){
+      out += '<div class="site-section-title">'+esc(group.section)+'</div>' + rows;
+    }
+  });
+  document.getElementById("panel-sites").innerHTML = any ? out : emptyState(q);
+}
+
+function renderProblemes(q){
+  var out = "";
+  var any = false;
+  PROBLEMES.forEach(function(p, idx){
+    if(matches(q, [p.t, p.s].concat(p.sol))){
+      any = true;
+      var sol = p.sol.map(function(x){ return '<li>'+esc(x)+'</li>'; }).join("");
+      out += '<div class="fiche" data-idx="'+idx+'">' +
+        '<div class="fiche-head">' +
+          '<span class="fiche-mark">!</span>' +
+          '<span class="fiche-title">'+esc(p.t)+'</span>' +
+          '<span class="fiche-chevron">&#8250;</span>' +
+        '</div>' +
+        '<div class="fiche-body">' +
+          '<p class="fiche-symptomes">'+esc(p.s)+'</p>' +
+          '<ol class="fiche-solutions">'+sol+'</ol>' +
+        '</div>' +
+      '</div>';
+    }
+  });
+  document.getElementById("panel-problemes").innerHTML = any ? out : emptyState(q);
+  document.querySelectorAll("#panel-problemes .fiche-head").forEach(function(h){
+    h.addEventListener("click", function(){
+      h.parentElement.classList.toggle("open");
+    });
+  });
+}
+
+function emptyState(q){
+  return '<p class="empty">Aucune fiche ne correspond à «\u00a0'+esc(q)+'\u00a0». Essayez un autre terme.</p>';
+}
+
+var RENDERERS = { abbr:renderAbbr, acteurs:renderActeurs, sites:renderSites, problemes:renderProblemes };
+var PLACEHOLDERS = {
+  abbr:"Chercher un sigle (ex. CPE, PPMS, LSU)…",
+  acteurs:"Chercher un rôle ou une situation (ex. harcèlement, AESH)…",
+  sites:"Chercher un site ou une ressource (ex. BBC, académique)…",
+  problemes:"Chercher une situation (ex. autorité, mémoire, inspection)…"
+};
+
+var current = "abbr";
+var search = document.getElementById("search");
+
+function refresh(){
+  RENDERERS[current](search.value);
+}
+
+document.querySelectorAll(".tab").forEach(function(tab){
+  tab.addEventListener("click", function(){
+    document.querySelectorAll(".tab").forEach(function(t){ t.classList.remove("active"); });
+    document.querySelectorAll(".tab-panel").forEach(function(p){ p.classList.remove("active"); });
+    tab.classList.add("active");
+    current = tab.getAttribute("data-tab");
+    document.getElementById("panel-"+current).classList.add("active");
+    search.value = "";
+    search.placeholder = PLACEHOLDERS[current];
+    refresh();
+  });
+});
+
+search.addEventListener("input", refresh);
+
+// stats
+var abbrCount = 0; ABBR.forEach(function(g){ abbrCount += g.items.length; });
+var siteCount = 0; SITES.forEach(function(g){ siteCount += g.items.length; });
+document.getElementById("stats").textContent =
+  abbrCount+" sigles décodés · "+ACTEURS.length+" interlocuteurs · "+siteCount+" ressources · "+PROBLEMES.length+" situations traitées";
+
+search.placeholder = PLACEHOLDERS.abbr;
+refresh();
+
+})();
+</script>
+</body>
+</html>
